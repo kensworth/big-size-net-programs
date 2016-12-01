@@ -1,0 +1,25 @@
+{
+  "name": "big-size-net-programs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "app": "pm2 start ecosystem.json && pm2 logs",
+    "restart": "pm2 startOrRestart ecosystem.json && pm2 logs",
+    "test": "echo \"No tests\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kensworth/big-size-net-programs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kensworth/big-size-net-programs/issues"
+  },
+  "homepage": "https://github.com/kensworth/big-size-net-programs#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.7.1"
+  }
+}

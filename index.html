@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>BIG SIZE</title>
+    <script src="/assets/lib/vue.min.js"></script>
+    <link rel="stylesheet" href="/assets/lib/codemirror/codemirror.css">
+    <style media="screen">
+    html,body {
+      margin: 0;
+      padding: 0;
+      font-family: "Helvetica", sans-serif;
+      font-size: 1.1em;
+    }
+    .row {
+      max-width: 30rem;
+      margin: 0 auto;
+    }
+    .program-info {
+      padding: 0px 10px;
+    }
+    .title {
+      font-size: 2em;
+      padding: 1em 0;
+      font-weight: bold;
+    }
+    .info {
+      padding: 1em 0;
+
+    }
+    .technical {
+      color: #aaa;
+      padding: 1em 0;
+    }
+    #code {
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .button {
+      padding: 0.4em 1em;
+      border-radius: 4em;
+      border: none;
+      background: #348af5;
+      color:white;
+      margin-top: 1em;
+      font-size: 1em;
+      font-weight: bold;
+      outline:none;
+      cursor: pointer;
+    }
+    .center {
+      text-align: center;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="view">
+      <div class="program-info row">
+        <div class="title center">
+          {{program.title}}
+        </div>
+        <div class="info">
+          {{program.info}}
+        </div>
+        <div class="technical">
+          {{program.technical}}
+        </div>
+      </div>
+      <div id="code" class="row"></div>
+      <div class="row center">
+        <button class="button" type="button" name="button" @click="submitCode()">Submit</button>
+      </div>
+    </div>
+    <script src="/assets/lib/socket.io.min.js"></script>
+    <script src="/assets/lib/codemirror/codemirror.js"></script>
+    <script src="/assets/lib/codemirror/python.js"></script>
+    <script>
+
+    var socket = io();
+    var program = {
+      title:"Some Program Title",
+      info:"Info 4 Bytes, write a 'Hello World' program",
+      technical:"You have 10 minutes",
+    }
+
+    var vm = new Vue({
+      el:"#view",
+      data: {
+        program: program
+      },
+      methods: {
+        submitCode: function() {
+          console.log(myCodeMirror.doc.getValue());
+          socket.emit("submission", myCodeMirror.doc.getValue());
+        }
+      }
+    });
+    var myCodeMirror = CodeMirror(document.getElementById("code"), {
+      value: 'print("Hello, World")\n',
+      mode:  "python",
+      lineNumbers: true
+    });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+{
+  apps : [
+    {
+      name      : "Big Size Application Server",
+      script    : "server.js",
+      watch     : true
+    }
+  ],
+
+}
