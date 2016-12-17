@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 
 mongoose.Promise = bluebird;
 
-const { programSchema, submissionSchema } = require("./db.models.js");
+const dbmodels = require("./db.models.js");
+const programSchema = dbmodels.programSchema;
+const submissionSchema = dbmodels.submissionSchema;
 
 mongoose.connect('mongodb://localhost/big-size');
 
