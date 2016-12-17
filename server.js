@@ -1,23 +1,40 @@
 const express = require('express');
+const path = require('path');
+const mongoose = require('mongoose');
+const db = require('./db/db.config.js');
+const Submission = mongoose.model('Submission');
+const Program = mongoose.model('Program');
+const admin = require('./admin');
+const bodyParser = require('body-parser');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const path = require('path');
-// const mongoose = require('mongoose');
-// const Submission = mongoose.model('Submission');
-// const Program = mongoose.model('Program');
 
-app.use('/admin', require('./admin'));
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
+
+app.use('/admin', admin);
+
 app.use('/assets', express.static(path.join(__dirname, '/app/assets')));
 
 app.all("*", (req, res) => {
+  console.log("yo");
   res.sendFile(path.join(__dirname, 'app/index.html'));
 });
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  const currentProgram = {};
+  Program
+  .findOne({})
+  .then((data) => {
+    const currentProgram = data;
+    socket.emit('problem', data);
+  });
   socket.on('submission', (data) => {
-    console.log(data);
+      console.log(data.code);
   });
 });
 

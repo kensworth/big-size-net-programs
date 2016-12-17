@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Admin page</title>
+  <link rel="stylesheet" href="style.css">
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <script src="/assets/lib/vue.min.js"></script>
+</head>
+<body>
+  <div id="view">
+    <div class="row">
+      <input type="text" name="" value="" placeholder="title" v-model="program.title">
+    </div>
+    <div class="row">
+      <textarea name="name" rows="8" cols="80" placeholder="Description" v-model="program.desc"></textarea>
+    </div>
+    <div class="row">
+      <textarea name="name" rows="8" cols="80" placeholder="Default code" v-model="program.defaultCode"></textarea>
+    </div>
+    <div class="row">
+      <input type="text" name="test1" value="" placeholder="title" v-model="newTestCase.input">
+      <input type="text" name="test1" value="" placeholder="title" v-model="newTestCase.output">
+      <button type="button" name="button" @click="addTestCase">Add test case</button>
+    </div>
+    <div class="row">
+      {{program}}
+    </div>
+    <div class="row">
+      <button type="button" name="button" @click="submit">Submit</button>
+    </div>
+  </div>
+  <script type="text/javascript">
+  var vm = new Vue({
+    el:"#view",
+    data: {
+      newTestCase: {
+        input: "",
+        inputType: "",
+        output: "",
+        outputType: "",
+      },
+      program: {
+        title: "",
+        desc: "",
+        testCases: [],
+        releaseDate: "",
+        defaultCode: "",
+        timeout: 100,
+      }
+    },
+    methods: {
+      addTestCase: function() {
+        this.program.testCases.push(this.newTestCase);
+        this.newTestCase = {
+          input: "",
+          output: ""
+        }
+      },
+      submit: function() {
+        console.log("submit", this.program);
+        $.ajax({
+          method: "POST",
+          url: "admin/add-program",
+          data: {
+            data: JSON.stringify(this.program)
+          }
+        })
+        .done(function( msg ) {
+          console.log( "Data Saved: " + msg );
+        });
+      }
+    }
+  });
+  </script>
+</body>
+</html>
