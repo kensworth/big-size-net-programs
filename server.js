@@ -10,7 +10,6 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-const path = require('path');
 var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 var sqs = new AWS.SQS();
@@ -56,8 +55,6 @@ io.on('connection', (socket) => {
       if (err) console.log(err);
       else console.log(data);
     });
-    //console.log(data);
-
   });
 });
 
