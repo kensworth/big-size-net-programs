@@ -10,6 +10,12 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
+const path = require('path');
+var AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-1'});
+var sqs = new AWS.SQS();
+
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -34,7 +40,24 @@ io.on('connection', (socket) => {
     socket.emit('problem', data);
   });
   socket.on('submission', (data) => {
-      console.log(data.code);
+    console.log(data.code);
+    var params = {
+      DelaySeconds: 10,
+      MessageAttributes: {
+        "Submission": {
+          DataType: "String",
+          StringValue: data.code
+        },
+      }
+      MessageBody: "User Submission",
+      QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/SubmissionQueue"
+    }
+    sqs.sendMessage(params, function(err,data){
+      if (err) console.log(err);
+      else console.log(data);
+    });
+    //console.log(data);
+
   });
 });
 
