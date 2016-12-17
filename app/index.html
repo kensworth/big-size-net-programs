@@ -50,16 +50,23 @@
     .center {
       text-align: center;
     }
+    #view {
+      opacity: 0;
+      transition: 100ms linear all;
+    }
+    #view.ready {
+      opacity: 1;
+    }
     </style>
   </head>
   <body>
-    <div id="view">
+    <div id="view" :class="{'ready': ready}">
       <div class="program-info row">
         <div class="title center">
           {{program.title}}
         </div>
         <div class="info">
-          {{program.info}}
+          {{program.desc}}
         </div>
         <div class="technical">
           {{program.technical}}
@@ -76,29 +83,44 @@
     <script>
 
     var socket = io();
-    var program = {
-      title:"Some Program Title",
-      info:"Info 4 Bytes, write a 'Hello World' program",
-      technical:"You have 10 minutes",
-    }
 
-    var vm = new Vue({
-      el:"#view",
-      data: {
-        program: program
-      },
-      methods: {
-        submitCode: function() {
-          console.log(myCodeMirror.doc.getValue());
-          socket.emit("submission", myCodeMirror.doc.getValue());
+
+    var program = {
+      title:"",
+      info:"",
+      technical:"",
+    }
+    socket.on('problem', function(data) {
+      console.log(data);
+      var vm = new Vue({
+        el:"#view",
+        data: {
+          ready: false,
+          program: data
+        },
+        methods: {
+          submitCode: function() {
+            console.log(myCodeMirror.doc.getValue());
+            socket.emit("submission", {
+              code: myCodeMirror.doc.getValue(),
+              programId: this.program._id,
+            });
+          }
+        },
+        mounted: function() {
+          this.ready = true;
         }
-      }
+      });
+
+      var myCodeMirror = CodeMirror(document.getElementById("code"), {
+        value: data.defaultCode,
+        mode:  "python",
+        lineNumbers: true
+      });
     });
-    var myCodeMirror = CodeMirror(document.getElementById("code"), {
-      value: 'print("Hello, World")\n',
-      mode:  "python",
-      lineNumbers: true
-    });
+
+
+
     </script>
   </body>
 </html>

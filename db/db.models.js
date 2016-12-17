@@ -6,6 +6,8 @@ const programSchema = new Schema({
   desc: String,
   testCases: Schema.Types.Mixed,
   releaseDate: Date,
+  defaultCode: String,
+  timeout: Number,
 });
 
 const submissionSchema = new Schema({
