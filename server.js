@@ -3,9 +3,10 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const path = require('path');
-const mongoose = require('mongoose');
-const Submission = mongoose.model('Submission');
-const Program = mongoose.model('Program');
+// const mongoose = require('mongoose');
+// const Submission = mongoose.model('Submission');
+// const Program = mongoose.model('Program');
+
 app.use('/admin', require('./admin'));
 app.use('/assets', express.static(path.join(__dirname, '/app/assets')));
 
