@@ -41,7 +41,6 @@ io.on('connection', (socket) => {
   socket.on('submission', (data) => {
     console.log(data.code);
     var params = {
-      DelaySeconds: 10,
       MessageAttributes: {
         "Submission": {
           DataType: "String",
