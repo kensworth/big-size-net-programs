@@ -48,10 +48,10 @@ io.on('connection', (socket) => {
           DataType: "String",
           StringValue: data.code
         },
-      }
+      },
       MessageBody: "User Submission",
       QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/SubmissionQueue"
-    }
+    };
     sqs.sendMessage(params, function(err,data){
       if (err) console.log(err);
       else console.log(data);
