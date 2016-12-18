@@ -5,59 +5,7 @@
     <title>BIG SIZE</title>
     <script src="/assets/lib/vue.min.js"></script>
     <link rel="stylesheet" href="/assets/lib/codemirror/codemirror.css">
-    <style media="screen">
-    html,body {
-      margin: 0;
-      padding: 0;
-      font-family: "Helvetica", sans-serif;
-      font-size: 1.1em;
-    }
-    .row {
-      max-width: 30rem;
-      margin: 0 auto;
-    }
-    .program-info {
-      padding: 0px 10px;
-    }
-    .title {
-      font-size: 2em;
-      padding: 1em 0;
-      font-weight: bold;
-    }
-    .info {
-      padding: 1em 0;
-
-    }
-    .technical {
-      color: #aaa;
-      padding: 1em 0;
-    }
-    #code {
-      border: 1px solid rgba(0,0,0,0.1);
-    }
-    .button {
-      padding: 0.4em 1em;
-      border-radius: 4em;
-      border: none;
-      background: #348af5;
-      color:white;
-      margin-top: 1em;
-      font-size: 1em;
-      font-weight: bold;
-      outline:none;
-      cursor: pointer;
-    }
-    .center {
-      text-align: center;
-    }
-    #view {
-      opacity: 0;
-      transition: 100ms linear all;
-    }
-    #view.ready {
-      opacity: 1;
-    }
-    </style>
+    <link rel="stylesheet" href="/assets/css/style.css">
   </head>
   <body>
     <div id="view" :class="{'ready': ready}">
@@ -77,50 +25,15 @@
         <button class="button" type="button" name="button" @click="submitCode()">Submit</button>
       </div>
     </div>
+    <div class="error">
+      No Problems are currently live.<br><br>Try checking in later.
+    </div>
+    <div class="show-scoreboard">
+      <div class="inner">Show Scoreboard</div>
+    </div>
     <script src="/assets/lib/socket.io.min.js"></script>
     <script src="/assets/lib/codemirror/codemirror.js"></script>
     <script src="/assets/lib/codemirror/python.js"></script>
-    <script>
-
-    var socket = io();
-
-
-    var program = {
-      title:"",
-      info:"",
-      technical:"",
-    }
-    socket.on('problem', function(data) {
-      console.log(data);
-      var vm = new Vue({
-        el:"#view",
-        data: {
-          ready: false,
-          program: data
-        },
-        methods: {
-          submitCode: function() {
-            console.log(myCodeMirror.doc.getValue());
-            socket.emit("submission", {
-              code: myCodeMirror.doc.getValue(),
-              programId: this.program._id,
-            });
-          }
-        },
-        mounted: function() {
-          this.ready = true;
-        }
-      });
-
-      var myCodeMirror = CodeMirror(document.getElementById("code"), {
-        value: data.defaultCode,
-        mode:  "python",
-        lineNumbers: true
-      });
-    });
-
-
-
-    </script>
+    <script type="text/javascript" src="/assets/js/app.js"></script>
   </body>
 </html>

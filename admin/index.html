@@ -3,78 +3,73 @@
 <head>
   <meta charset="utf-8">
   <title>Admin page</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/assets/css/form-reset.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pavilion/1.0.30/pavilion.min.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="/assets/lib/jquery-clockpicker.min.css">
   <script
   src="https://code.jquery.com/jquery-3.1.1.min.js"
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"></script>
+  <script src="/assets/lib/jquery-clockpicker.min.js" charset="utf-8"></script>
   <script src="/assets/lib/vue.min.js"></script>
 </head>
 <body>
   <div id="view">
-    <div class="row">
-      <input type="text" name="" value="" placeholder="title" v-model="program.title">
-    </div>
-    <div class="row">
-      <textarea name="name" rows="8" cols="80" placeholder="Description" v-model="program.desc"></textarea>
-    </div>
-    <div class="row">
-      <textarea name="name" rows="8" cols="80" placeholder="Default code" v-model="program.defaultCode"></textarea>
-    </div>
-    <div class="row">
-      <input type="text" name="test1" value="" placeholder="title" v-model="newTestCase.input">
-      <input type="text" name="test1" value="" placeholder="title" v-model="newTestCase.output">
-      <button type="button" name="button" @click="addTestCase">Add test case</button>
-    </div>
-    <div class="row">
-      {{program}}
-    </div>
-    <div class="row">
-      <button type="button" name="button" @click="submit">Submit</button>
+
+    <div class="container">
+      <div class="row col-pl-100">
+        <fieldset>
+          <label for="title">Title</label>
+          <input type="text" name="title" value="" class="title" placeholder="title" v-model="program.title">
+        </fieldset>
+      </div>
+      <div class="row">
+        <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+          <label for="">Release Time</label>
+          <input type="text" class="form-control" value="13:14" v-model="program.date">
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-time"></span>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <label for="desc">Description</label>
+        <textarea name="desc" rows="8" cols="80" placeholder="Description" v-model="program.desc"></textarea>
+      </div>
+      <div class="row">
+        <label for="defaultCode">Default Code</label>
+        <textarea name="defaultCode" rows="8" cols="80" placeholder="Default code" v-model="program.defaultCode"></textarea>
+      </div>
+      <div class="row">
+        <div class="" v-for="item in testCases">
+          {{item}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-flex">
+          <input class="test-case-input" type="text" name="test1" value="" placeholder="input" v-model="newTestCase.input">
+          <div class="type">
+            <select name="interests" id="inputType" v-model="newTestCase.inputType">
+              <option value="{{type}}" v-for="(type, index) in types">{{type}}</option>
+            </select>
+          </div>
+          <input class="test-case-input" type="text" name="test1" value="" placeholder="output" v-model="newTestCase.output">
+          <div class="type">
+            <select name="interests" id="selectInterests" v-model="newTestCase.outputType">
+              <option value="{{type}}" v-for="(type, index) in types">{{type}}</option>
+            </select>
+          </div>
+        </div>
+        <button class="button button-outline" type="button" name="button" @click="addTestCase">Add test case</button>
+      </div>
+
+      <br><br>
+      <div class="row submit-row">
+        <button class="button button-default submit" type="button" name="button" @click="submit">Submit</button>
+      </div>
     </div>
   </div>
-  <script type="text/javascript">
-  var vm = new Vue({
-    el:"#view",
-    data: {
-      newTestCase: {
-        input: "",
-        inputType: "",
-        output: "",
-        outputType: "",
-      },
-      program: {
-        title: "",
-        desc: "",
-        testCases: [],
-        releaseDate: "",
-        defaultCode: "",
-        timeout: 100,
-      }
-    },
-    methods: {
-      addTestCase: function() {
-        this.program.testCases.push(this.newTestCase);
-        this.newTestCase = {
-          input: "",
-          output: ""
-        }
-      },
-      submit: function() {
-        console.log("submit", this.program);
-        $.ajax({
-          method: "POST",
-          url: "admin/add-program",
-          data: {
-            data: JSON.stringify(this.program)
-          }
-        })
-        .done(function( msg ) {
-          console.log( "Data Saved: " + msg );
-        });
-      }
-    }
-  });
-  </script>
+  <script src="/assets/js/admin.js" charset="utf-8"></script>
 </body>
 </html>

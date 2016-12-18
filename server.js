@@ -33,10 +33,12 @@ app.all("*", (req, res) => {
 io.on('connection', (socket) => {
   const currentProgram = {};
   Program
-  .findOne({})
+  .find()
+  .sort({releaseDate:1})
+  .limit(1)
   .then((data) => {
-    const currentProgram = data;
-    socket.emit('problem', data);
+    const currentProgram = data[0];
+    socket.emit('problem', currentProgram);
   });
   socket.on('submission', (data) => {
     console.log(data.code);

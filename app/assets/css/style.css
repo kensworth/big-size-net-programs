@@ -1,0 +1,77 @@
+html,body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica", sans-serif;
+  font-size: 1.1em;
+}
+.row {
+  max-width: 30rem;
+  margin: 0 auto;
+}
+.program-info {
+  padding: 0px 10px;
+}
+.title {
+  font-size: 2em;
+  padding: 1em 0;
+  font-weight: bold;
+}
+.info {
+  padding: 1em 0;
+
+}
+.technical {
+  color: #aaa;
+  padding: 1em 0;
+}
+#code {
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.button {
+  padding: 0.4em 1em;
+  border-radius: 4em;
+  border: none;
+  background: #348af5;
+  color:white;
+  margin-top: 1em;
+  font-size: 1em;
+  font-weight: bold;
+  outline:none;
+  cursor: pointer;
+}
+.center {
+  text-align: center;
+}
+#view {
+  opacity: 0;
+  transition: 100ms linear all;
+}
+#view.ready {
+  opacity: 1;
+}
+.error {
+  display: none;
+  font-size: 1.4em;
+  opacity: 0.8;
+  padding: 1em;
+  text-align: center;
+}
+
+.show-scoreboard {
+  text-align: center;
+}
+
+.show-scoreboard .inner {
+  font-size: 1.4em;
+  opacity: 0.8;
+  padding: 0.2em 0.2em;
+  text-align: center;
+  color: blue;
+  border-bottom: 2px solid;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 auto;
+}
+.no-question .error {
+  display: block;
+}
