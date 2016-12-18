@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
       if (err) console.log(err);
       else console.log(data);
     });
-    
+
     sqs.receiveMessage({
       AttributeNames: [
         "All"
@@ -78,7 +78,7 @@ io.on('connection', (socket) => {
         console.log("data:",data);
         if(data.Messages) {
           const receiptHandle = data.Messages[0].ReceiptHandle;
-          const attributes = data.Messages[0].Attributes;
+          const attributes = data.Messages[0].MessageAttributes;
 
           console.log("Receipt", receiptHandle, "Attributes:", attributes);
 
