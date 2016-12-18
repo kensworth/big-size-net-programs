@@ -1,11 +1,7 @@
 (function() {
   var socket = io();
   var connected = false;
-  var program = {
-    title:"",
-    info:"",
-    technical:"",
-  };
+  var program = {};
 
   socket.on('problem', function(data) {
     console.log(data);

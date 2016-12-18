@@ -7,6 +7,7 @@ const programSchema = new Schema({
   testCases: Schema.Types.Mixed,
   releaseDate: Date,
   defaultCode: String,
+  callSignature: String,
   timeout: Number,
 });
 

@@ -31,22 +31,33 @@ app.all("*", (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  const currentProgram = {};
+  let currentProgram = {};
   Program
   .find()
-  .sort({releaseDate:1})
+  .sort({releaseDate:-1})
   .limit(1)
   .then((data) => {
-    const currentProgram = data[0];
+    currentProgram = data[0];
     socket.emit('problem', currentProgram);
   });
   socket.on('submission', (data) => {
-    console.log(data.code);
+    console.log(data, currentProgram);
+    const submission = data.code;
+    const tests = {
+      program_name: currentProgram.title,
+      call_signature: "n",
+      tests: currentProgram.testCases
+    };
+
     var params = {
       MessageAttributes: {
         "Submission": {
           DataType: "String",
-          StringValue: data.code
+          StringValue: submission
+        },
+        "Tests": {
+          DataType: "String",
+          StringValue: JSON.stringify(tests),
         },
       },
       MessageBody: "User Submission",
@@ -56,7 +67,9 @@ io.on('connection', (socket) => {
       if (err) console.log(err);
       else console.log(data);
     });
-    var params = { QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue"}
+    params = {
+      QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue"
+    };
     sqs.receiveMessage(params,function(err,data){
       if (err)console.log(err);
       else console.log(data);
