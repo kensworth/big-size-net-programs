@@ -6,6 +6,8 @@ const Submission = mongoose.model('Submission');
 const Program = mongoose.model('Program');
 const admin = require('./admin');
 const bodyParser = require('body-parser');
+const favicon = require('serve-favicon');
+
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -13,6 +15,8 @@ const io = require('socket.io')(http);
 const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const sqs = new AWS.SQS();
+
+app.use(favicon(__dirname + '/public/favicon.ico'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

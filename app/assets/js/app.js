@@ -42,5 +42,4 @@
   socket.on('results', function(data, time) {
     console.log(data, time);
   });
-
 })();
