@@ -75,7 +75,9 @@ io.on('connection', (socket) => {
     sqs.receiveMessage(params,function(err,data){
       if (err)console.log(err);
       else {
-        console.log(12,data);
+        let receiptHandle = data.Messages[0].ReceiptHandle;
+        let attributes = data.Messages[0].Attributes;
+        console.log("Attributes:", attributes);
       }
     });
   });
