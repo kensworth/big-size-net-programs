@@ -63,34 +63,36 @@ io.on('connection', (socket) => {
       if (err) console.log(err);
       else console.log(data);
     });
-
-    sqs.receiveMessage({
-      AttributeNames: [
-        "All"
-      ],
-      MessageAttributeNames: [
-        "All"
-      ],
-      QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue"
-    }, (err,data) => {
-      if (err)console.log(err);
-      else {
-        const receiptHandle = data.Messages[0].ReceiptHandle;
-        const attributes = data.Messages[0].Attributes;
-
-        console.log("Receipt", receiptHandle, "Attributes:", attributes);
-
-        sqs.deleteMessage({
-          QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue",
-          ReceiptHandle: receiptHandle,
-        }, (err, data) => {
-          if (err) console.log(err, err.stack);
-          else  console.log(data);
-        });
-      }
-    });
   });
 });
+
+sqs.receiveMessage({
+  AttributeNames: [
+    "All"
+  ],
+  MessageAttributeNames: [
+    "All"
+  ],
+  QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue"
+}, (err,data) => {
+  if (err)console.log(err);
+  else {
+    const receiptHandle = data.Messages[0].ReceiptHandle;
+    const attributes = data.Messages[0].Attributes;
+
+    console.log("Receipt", receiptHandle, "Attributes:", attributes);
+
+    sqs.deleteMessage({
+      QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue",
+      ReceiptHandle: receiptHandle,
+    }, (err, data) => {
+      if (err) console.log(err, err.stack);
+      else  console.log(data);
+    });
+  }
+});
+
+
 
 http.listen(8081, () => {
   console.log('listening on *:8081');
