@@ -77,18 +77,20 @@ sqs.receiveMessage({
 }, (err,data) => {
   if (err)console.log(err);
   else {
-    const receiptHandle = data.Messages[0].ReceiptHandle;
-    const attributes = data.Messages[0].Attributes;
+    if(data.Messages) {
+      const receiptHandle = data.Messages[0].ReceiptHandle;
+      const attributes = data.Messages[0].Attributes;
 
-    console.log("Receipt", receiptHandle, "Attributes:", attributes);
+      console.log("Receipt", receiptHandle, "Attributes:", attributes);
 
-    sqs.deleteMessage({
-      QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue",
-      ReceiptHandle: receiptHandle,
-    }, (err, data) => {
-      if (err) console.log(err, err.stack);
-      else  console.log(data);
-    });
+      sqs.deleteMessage({
+        QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue",
+        ReceiptHandle: receiptHandle,
+      }, (err, data) => {
+        if (err) console.log(err, err.stack);
+        else  console.log(data);
+      });
+    }
   }
 });
 
