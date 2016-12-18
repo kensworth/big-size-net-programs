@@ -14,7 +14,8 @@ router.post('/add-program', (req, res) => {
     desc: programData.desc,
     testCases: programData.testCases,
     releaseDate: programData.releaseDate,
-    defaultCode: programData.defaultCode,
+    functionName: programData.functionName,
+    callSignature: programData.callSignature,
   });
   newProg
   .save()

@@ -1,11 +1,13 @@
 (function() {
-  var program = {
+  var EMPTY_PROGRAM = {
     title: "",
     desc: "",
+    functionName: "",
+    callSignature: "",
     releaseDate: "",
-    defaultCode: "",
     timeout: 100,
   };
+  var program = EMPTY_PROGRAM;
   var testCases = [];
   var intMaker = function(n) {
     var ret = n;
@@ -31,9 +33,11 @@
       addTestCase: function() {
         var _newTestCase = this.newTestCase;
         var _input = {};
-        _newTestCase.input.split("\n").map(function(line) {
-          _input[line.split("=")[0]] = intMaker(line.split('=').slice(1).join('='));
-        });
+        if(_newTestCase.input) {
+          _newTestCase.input.split("\n").map(function(line) {
+            _input[line.split("=")[0]] = intMaker(line.split('=').slice(1).join('='));
+          });
+        }
         _newTestCase.input = _input;
         _newTestCase.expected = intMaker(_newTestCase.expected);
         testCases.push(_newTestCase);
@@ -57,13 +61,7 @@
         })
         .done(function( msg ) {
           console.log( "Data Saved: " + msg );
-          this.program = {
-            title: "",
-            desc: "",
-            releaseDate: "",
-            defaultCode: "",
-            timeout: 100,
-          };
+          this.program = EMPTY_PROGRAM;
           this.testCases = [];
         });
       }

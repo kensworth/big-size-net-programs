@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
     console.log(data, currentProgram);
     const submission = data.code;
     const tests = {
-      program_name: currentProgram.title,
+      program_name: currentProgram.functionName,
       call_signature: "n",
       tests: currentProgram.testCases
     };

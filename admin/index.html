@@ -24,6 +24,7 @@
           <input type="text" name="title" value="" class="title" placeholder="title" v-model="program.title">
         </fieldset>
       </div>
+
       <div class="row">
         <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
           <label for="">Release Time</label>
@@ -37,9 +38,17 @@
         <label for="desc">Description</label>
         <textarea name="desc" rows="8" cols="80" placeholder="Description" v-model="program.desc"></textarea>
       </div>
-      <div class="row">
-        <label for="defaultCode">Default Code</label>
-        <textarea name="defaultCode" rows="8" cols="80" placeholder="Default code" v-model="program.defaultCode"></textarea>
+      <div class="row col-pl-100">
+        <fieldset>
+          <label for="title">Function Name</label>
+          <input type="text" name="title" value="" placeholder="function" v-model="program.functionName">
+        </fieldset>
+      </div>
+      <div class="row col-pl-100">
+        <fieldset>
+          <label for="title">Call Signature</label>
+          <input type="text" name="title" value="" placeholder="a,b,c" v-model="program.callSignature">
+        </fieldset>
       </div>
       <div class="row">
         <div class="" v-for="item in testCases">
@@ -66,8 +75,11 @@
       </div>
       <div class="">
         {{testCases}}
+
       </div>
-      <br><br>
+      <br>
+      {{program}}
+      <br>
       <div class="row submit-row">
         <button class="button button-default submit" type="button" name="button" @click="submit">Submit</button>
       </div>

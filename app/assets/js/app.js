@@ -32,7 +32,7 @@
       });
 
       var myCodeMirror = CodeMirror(document.getElementById("code"), {
-        value: data.defaultCode,
+        value: "def " + data.functionName + "(" + data.callSignature +"):",
         mode:  "python",
         lineNumbers: true
       });

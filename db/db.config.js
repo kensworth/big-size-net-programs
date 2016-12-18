@@ -10,6 +10,5 @@ const submissionSchema = dbmodels.submissionSchema;
 
 mongoose.connect('mongodb://localhost/big-size');
 
-
 mongoose.model('Submission', submissionSchema);
 mongoose.model('Program', programSchema);
