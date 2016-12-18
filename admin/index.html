@@ -51,13 +51,13 @@
           <input class="test-case-input" type="text" name="test1" value="" placeholder="input" v-model="newTestCase.input">
           <div class="type">
             <select name="interests" id="inputType" v-model="newTestCase.inputType">
-              <option value="{{type}}" v-for="(type, index) in types">{{type}}</option>
+              <option :value="type" v-for="type in types">{{type}}</option>
             </select>
           </div>
           <input class="test-case-input" type="text" name="test1" value="" placeholder="output" v-model="newTestCase.output">
           <div class="type">
             <select name="interests" id="selectInterests" v-model="newTestCase.outputType">
-              <option value="{{type}}" v-for="(type, index) in types">{{type}}</option>
+              <option :value="type" v-for="type in types">{{type}}</option>
             </select>
           </div>
         </div>
