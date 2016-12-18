@@ -77,6 +77,7 @@ sqs.receiveMessage({
 }, (err,data) => {
   if (err)console.log(err);
   else {
+    console.log("data:",data);
     if(data.Messages) {
       const receiptHandle = data.Messages[0].ReceiptHandle;
       const attributes = data.Messages[0].Attributes;
