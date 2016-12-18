@@ -39,8 +39,8 @@
       });
     }
   });
-  socket.on('results', function(data) {
-    console.log(data);
+  socket.on('results', function(data, time) {
+    console.log(data, time);
   });
 
 })();
