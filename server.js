@@ -56,6 +56,11 @@ io.on('connection', (socket) => {
       if (err) console.log(err);
       else console.log(data);
     });
+    var params = { QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue"}
+    sqs.receiveMessage(params,function(err,data){
+      if (err)console.log(err);
+      else console.log(data);
+    });
   });
 });
 
