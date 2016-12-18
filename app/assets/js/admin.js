@@ -37,7 +37,7 @@
       submit: function() {
         console.log("submit", this.program);
 
-        this.program.date = new Date().getTime();
+        this.program.releaseDate = new Date().getTime();
 
         this.program.testCases = testCases;
         $.ajax({
