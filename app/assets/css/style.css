@@ -59,10 +59,11 @@ html,body {
 
 .show-scoreboard {
   text-align: center;
+
 }
 
 .show-scoreboard .inner {
-  font-size: 1.4em;
+  font-size: 0.6em;
   opacity: 0.8;
   padding: 0.2em 0.2em;
   text-align: center;
@@ -71,6 +72,7 @@ html,body {
   cursor: pointer;
   display: inline-block;
   margin: 0 auto;
+  margin-top: 2em;
 }
 .no-question .error {
   display: block;
