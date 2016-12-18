@@ -10,15 +10,11 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-var AWS = require('aws-sdk');
+const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
-var sqs = new AWS.SQS();
+const sqs = new AWS.SQS();
 
-
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-
-// parse application/json
 app.use(bodyParser.json());
 
 app.use('/admin', admin);
@@ -49,11 +45,11 @@ io.on('connection', (socket) => {
       tests: currentProgram.testCases
     };
 
-    var params = {
+    let params = {
       MessageAttributes: {
         "Submission": {
           DataType: "String",
-          StringValue: submission
+          StringValue: submission,
         },
         "Tests": {
           DataType: "String",

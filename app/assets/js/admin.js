@@ -7,31 +7,39 @@
     timeout: 100,
   };
   var testCases = [];
+  var intMaker = function(n) {
+    var ret = n;
+    if(!isNaN(parseFloat(n)) && isFinite(n)) {
+      ret = parseFloat(n);
+    } else {
+      ret = n.replace(/^"(.*)"$/, '$1');
+    }
+    return ret;
+  };
+
   var vm = new Vue({
     el:"#view",
     data: {
       newTestCase: {
         input: "",
-        inputType: "str",
-        output: "",
-        outputType: "str",
+        expected: ""
       },
       program: program,
-      testCases: testCases,
-      types: [
-        "str",
-        "int",
-        "float",
-      ]
+      testCases: testCases
     },
     methods: {
       addTestCase: function() {
-        testCases.push(this.newTestCase);
+        var _newTestCase = this.newTestCase;
+        var _input = {};
+        _newTestCase.input.split("\n").map(function(line) {
+          _input[line.split("=")[0]] = intMaker(line.split('=').slice(1).join('='));
+        });
+        _newTestCase.input = _input;
+        _newTestCase.expected = intMaker(_newTestCase.expected);
+        testCases.push(_newTestCase);
         this.newTestCase =  {
           input: "",
-          inputType: "str",
-          output: "",
-          outputType: "str",
+          expected: ""
         };
       },
       submit: function() {
@@ -49,6 +57,14 @@
         })
         .done(function( msg ) {
           console.log( "Data Saved: " + msg );
+          this.program = {
+            title: "",
+            desc: "",
+            releaseDate: "",
+            defaultCode: "",
+            timeout: 100,
+          };
+          this.testCases = [];
         });
       }
     },

@@ -48,22 +48,25 @@
       </div>
       <div class="row">
         <div class="row-flex">
-          <input class="test-case-input" type="text" name="test1" value="" placeholder="input" v-model="newTestCase.input">
-          <div class="type">
-            <select name="interests" id="inputType" v-model="newTestCase.inputType">
-              <option :value="type" v-for="type in types">{{type}}</option>
-            </select>
+          <div class="">
+            <label for="">Input: (one variable per line)</label>
+            <textarea class="test-case-input"
+              type="text" rows="4" cols="40" name="test1" value=""
+              placeholder='n=1'
+              v-model="newTestCase.input"
+            >
+            </textarea>
           </div>
-          <input class="test-case-input" type="text" name="test1" value="" placeholder="output" v-model="newTestCase.output">
-          <div class="type">
-            <select name="interests" id="selectInterests" v-model="newTestCase.outputType">
-              <option :value="type" v-for="type in types">{{type}}</option>
-            </select>
+          <div class="">
+            <label for="">Expected:</label>
+            <input class="test-case-input" type="text" name="test1" value="" placeholder="output" v-model="newTestCase.expected">
           </div>
         </div>
         <button class="button button-outline" type="button" name="button" @click="addTestCase">Add test case</button>
       </div>
-
+      <div class="">
+        {{testCases}}
+      </div>
       <br><br>
       <div class="row submit-row">
         <button class="button button-default submit" type="button" name="button" @click="submit">Submit</button>
