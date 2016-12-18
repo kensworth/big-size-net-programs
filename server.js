@@ -74,7 +74,9 @@ io.on('connection', (socket) => {
     };
     sqs.receiveMessage(params,function(err,data){
       if (err)console.log(err);
-      else console.log(data);
+      else {
+        console.log(12,data);
+      }
     });
   });
 });
