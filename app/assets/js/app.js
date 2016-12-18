@@ -2,6 +2,7 @@
   var socket = io();
   var connected = false;
   var program = {};
+  var vm;
 
   socket.on('problem', function(data) {
     console.log(data);
@@ -10,7 +11,7 @@
       return;
     }
     if(!connected) {
-      var vm = new Vue({
+      vm = new Vue({
         el:"#view",
         data: {
           ready: false,
@@ -38,4 +39,8 @@
       });
     }
   });
+  socket.on('results', function(data) {
+    console.log(data);
+  });
+
 })();
