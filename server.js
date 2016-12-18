@@ -80,14 +80,20 @@ io.on('connection', (socket) => {
           const receiptHandle = data.Messages[0].ReceiptHandle;
           const attributes = data.Messages[0].MessageAttributes;
 
-          console.log("Receipt", receiptHandle, "Attributes:", attributes);
+          // console.log("Attributes:", attributes);
+          const success = attributes.Success.StringValue === '1';
+          const timeTaken = attributes.TimeTaken.StringValue;
+          console.log("Success:",success, "time:",timeTaken);
+
 
           sqs.deleteMessage({
             QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue",
             ReceiptHandle: receiptHandle,
           }, (err, data) => {
             if (err) console.log(err, err.stack);
-            else  console.log(data);
+            else  {
+              console.log("Message was recieved and deleted.");
+            }
           });
         }
       }
