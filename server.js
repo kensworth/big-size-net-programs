@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
       tests: currentProgram.testCases
     };
 
-    let params = {
+    sqs.sendMessage({
       MessageAttributes: {
         "Submission": {
           DataType: "String",
@@ -58,12 +58,13 @@ io.on('connection', (socket) => {
       },
       MessageBody: "User Submission",
       QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/SubmissionQueue"
-    };
-    sqs.sendMessage(params, function(err,data){
+    },
+    (err,data) =>{
       if (err) console.log(err);
       else console.log(data);
     });
-    params = {
+
+    sqs.receiveMessage({
       AttributeNames: [
         "All"
       ],
@@ -71,13 +72,21 @@ io.on('connection', (socket) => {
         "All"
       ],
       QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue"
-    };
-    sqs.receiveMessage(params,function(err,data){
+    }, (err,data) => {
       if (err)console.log(err);
       else {
-        let receiptHandle = data.Messages[0].ReceiptHandle;
-        let attributes = data.Messages[0].Attributes;
-        console.log("Attributes:", attributes);
+        const receiptHandle = data.Messages[0].ReceiptHandle;
+        const attributes = data.Messages[0].Attributes;
+
+        console.log("Receipt", receiptHandle, "Attributes:", attributes);
+
+        sqs.deleteMessage({
+          QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue",
+          ReceiptHandle: receiptHandle,
+        }, (err, data) => {
+          if (err) console.log(err, err.stack);
+          else  console.log(data);
+        });
       }
     });
   });
