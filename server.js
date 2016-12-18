@@ -64,6 +64,12 @@ io.on('connection', (socket) => {
       else console.log(data);
     });
     params = {
+      AttributeNames: [
+        "All"
+      ],
+      MessageAttributeNames: [
+        "All"
+      ],
       QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue"
     };
     sqs.receiveMessage(params,function(err,data){
