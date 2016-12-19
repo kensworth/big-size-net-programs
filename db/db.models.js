@@ -24,8 +24,6 @@ const submissionSchema = new Schema({
   results: Schema.Types.Mixed,
   code: String,
   time: Number,
-}, {
-  number: false
 });
 
 module.exports = {

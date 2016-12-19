@@ -101,11 +101,13 @@ io.on('connection', (socket) => {
             const timeTaken = attributes.TimeTaken.StringValue;
 
             if(responseId === socket.id) {
+              console.log("Saving...");
               const s = new Submission({
                 username: "username", /// change this!
                 program: currentProgram._id,
                 results: {success:success},
                 time: timeTaken,
+                number: 0,
               });
               s.save((data) => {
                 socket.emit("results", success, timeTaken);
