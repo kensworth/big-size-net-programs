@@ -36,8 +36,6 @@ app.all("*", (req, res) => {
 io.on('connection', (socket) => {
   let currentProgram = {};
   __connections[socket.id] = socket;
-  console.log(__connections);
-
   Program
   .find()
   .sort({releaseDate:-1})
@@ -91,7 +89,7 @@ io.on('connection', (socket) => {
       else {
         if(data.Messages) {
           data.Messages.map((m) =>{
-            
+
             const attributes = m.MessageAttributes;
             const responseId = attributes.RequestId.StringValue;
             const receiptHandle = m.ReceiptHandle;
