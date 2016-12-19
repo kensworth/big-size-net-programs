@@ -9,6 +9,7 @@
     integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/assets/lib/codemirror/codemirror.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
   </head>
   <body>
@@ -24,9 +25,20 @@
             {{program.technical}}
           </div>
         </div>
-        <div id="code" class="row"></div>
-        <div class="row center">
-          <button class="button" type="button" name="button" @click="submitCode()">Submit</button>
+        <div v-if="!success">
+          <div id="code" class="row" ></div>
+          <div class="row center" v-if="!success">
+            <button class="button" type="button" name="button" @click="submitCode()">Submit <i class="ion-load-c" v-if="loading"></i></button>
+          </div>
+          <pre class="failed" v-if="Object.keys(fc).length">{{fc}}</pre>
+        </div>
+        <div class="success" v-if="success">
+          Success! All test cases passed.
+          <br>
+          Time:
+          <div class="success-time">
+            {{successTime}} ms
+          </div>
         </div>
         <div class="scoreboard" v-if="scoreboardOpen">
           <div class="inner">

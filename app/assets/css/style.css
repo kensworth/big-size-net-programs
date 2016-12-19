@@ -186,3 +186,51 @@ ul {
   padding: 0;
   min-width: 14rem;
 }
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.ion-load-c {
+    -webkit-animation: spin 1s infinite linear;
+    -moz-animation: spin 1s infinite linear;
+    -o-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear;
+}
+
+.success {
+  text-align: center;
+  background: rgba(44, 204, 51, 0.57);
+  padding: 0.5em;
+  margin: 0 auto;
+  max-width: 18rem;
+  border-radius: 4px;
+}
+.success-time {
+  font-size: 2em;
+}
+.failed {
+  padding: 0.5em;
+  margin: 1em auto;
+  max-width: 18rem;
+  border-radius: 4px;
+  background:rgba(255, 190, 192, 0.78);
+
+}

@@ -12,9 +12,20 @@
       scoreboardOpen: false,
       currentPage: 0,
       username: "",
+      loading: false,
+      success: false,
+      successTime: 0,
+      fc: {},
+      originalCode: "",
     },
     methods: {
       submitCode: function() {
+        if(vm.originalCode === cm.doc.getValue().trim()) {
+          console.log("empty code");
+          return;
+        }
+        if(this.loading) return;
+        this.loading = true;
         socket.emit("submission", {
           code: cm.doc.getValue(),
           programId: this.program._id,
@@ -32,8 +43,9 @@
 
   function initWithProgram(data) {
     vm.$set(vm, 'program', data);
+    vm.originalCode = "def " + data.functionName + "(" + data.callSignature +"):";
     cm = CodeMirror(document.getElementById("code"), {
-      value: "def " + data.functionName + "(" + data.callSignature +"):",
+      value: vm.originalCode,
       mode:  "python",
       lineNumbers: true
     });
@@ -51,19 +63,27 @@
     }
   });
 
-  socket.on('results', function(data, time) {
-    console.log(data, time);
+  socket.on('results', function(data, time, fc) {
+    console.log(data, time, fc);
+    vm.loading = false;
+    vm.fc = JSON.parse(fc.trim());
+    vm.successTime = ""+time;
     if(data) {
       console.log("congrats");
+      vm.success = true;
     }
   });
 
   function showScoreboard() {
     vm.scoreboardOpen = true;
-    console.log("getting scoreboard");
     $.ajax('/api/scoreboard/recent')
     .then(function(data){
-      vm.$set(vm, 'scoreboard', data);
+
+      var scores = data;
+      scores.sort(function(a, b) {
+        return parseFloat(a.time) - parseFloat(b.time);
+      });
+      vm.$set(vm, 'scoreboard', scores);
     });
   }
   $('.showScore').on('click', showScoreboard);

@@ -67,34 +67,74 @@ io.on('connection', (socket) => {
   socket.on('submission', (data) => {
     const submission = data.code;
     const username = data.username;
-    const tests = {
-      program_name: currentProgram.functionName,
-      call_signature:currentProgram.callSignature,
-      tests: currentProgram.testCases
-    };
-
-    sqs.sendMessage({
-      MessageAttributes: {
-        "Submission": {
-          DataType: "String",
-          StringValue: submission,
+    const programId = data.programId;
+    // console.log(programId, ""+currentProgram._id, programId === ""+currentProgram._id);
+    if(programId === ""+currentProgram._id) {
+      console.log("is current program");
+      const tests = {
+        program_name: currentProgram.functionName,
+        call_signature:currentProgram.callSignature,
+        tests: currentProgram.testCases
+      };
+      sqs.sendMessage({
+        MessageAttributes: {
+          "Submission": {
+            DataType: "String",
+            StringValue: submission,
+          },
+          "Tests": {
+            DataType: "String",
+            StringValue: JSON.stringify(tests),
+          },
+          "RequestId":{
+            DataType: "String",
+            StringValue: socket.id,
+          }
         },
-        "Tests": {
-          DataType: "String",
-          StringValue: JSON.stringify(tests),
-        },
-        "RequestId":{
-          DataType: "String",
-          StringValue: socket.id,
-        }
+        MessageBody: "User Submission",
+        QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/SubmissionQueue"
       },
-      MessageBody: "User Submission",
-      QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/SubmissionQueue"
-    },
-    (err,data) =>{
-      if (err) console.log(err);
-      else console.log(data);
-    });
+      (err,data) =>{
+        if (err) console.log(err);
+        else console.log(data);
+      });
+    } else {
+      console.log("is archived program");
+
+      Program
+      .findOne({_id: programId})
+      .then((_data) => {
+        let oldProgram = _data;
+        console.log("old",oldProgram);
+        const tests = {
+          program_name: oldProgram.functionName,
+          call_signature:oldProgram.callSignature,
+          tests: oldProgram.testCases
+        };
+        sqs.sendMessage({
+          MessageAttributes: {
+            "Submission": {
+              DataType: "String",
+              StringValue: submission,
+            },
+            "Tests": {
+              DataType: "String",
+              StringValue: JSON.stringify(tests),
+            },
+            "RequestId":{
+              DataType: "String",
+              StringValue: socket.id,
+            }
+          },
+          MessageBody: "User Submission",
+          QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/SubmissionQueue"
+        },
+        (err,data) =>{
+          if (err) console.log(err);
+          else console.log(data);
+        });
+      });
+    }
 
     sqs.receiveMessage({
       AttributeNames: [
@@ -116,7 +156,7 @@ io.on('connection', (socket) => {
             const receiptHandle = m.ReceiptHandle;
             const success = attributes.Success.StringValue === '1';
             const timeTaken = attributes.TimeTaken.StringValue;
-
+            const failedCase = attributes.FailedCase.StringValue;
             if(responseId === socket.id) {
               console.log("Saving...");
               const s = new Submission({
@@ -124,10 +164,11 @@ io.on('connection', (socket) => {
                 program: currentProgram._id,
                 results: {success:success},
                 time: timeTaken,
+                failedCase: failedCase,
                 number: 0,
               });
               s.save((data) => {
-                socket.emit("results", success, timeTaken);
+                socket.emit("results", success, timeTaken, failedCase);
               });
             }
             sqs.deleteMessage({
