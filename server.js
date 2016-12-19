@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
           StringValue: JSON.stringify(tests),
         },
         //generating a random ID. anthony, feel free to change this around
-        "ID":{
+        "RequestId":{
           DataType: "String",
           StringValue: uuid.v4()
         }          
@@ -96,10 +96,11 @@ io.on('connection', (socket) => {
           const receiptHandle = data.Messages[0].ReceiptHandle;
           const attributes = data.Messages[0].MessageAttributes;
 	  console.log("handle" + receiptHandle);
-          // console.log("Attributes:", attributes);
+          console.log("Attributes:", attributes);
+          const responseId = attributes.RequestId.StringValue;
           const success = attributes.Success.StringValue === '1';
           const timeTaken = attributes.TimeTaken.StringValue;
-          console.log("Success:",success, "time:",timeTaken);
+          console.log("RequestId:", responseId, "Success:",success, "time:",timeTaken);
           socket.emit("results", success, timeTaken);
 
           sqs.deleteMessage({
