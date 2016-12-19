@@ -51,4 +51,17 @@
     });
   }
   $('.showScore').on('click', showScoreboard);
+  
+  var modal = document.getElementById('myModal');
+  var btn = document.getElementById("myBtn");
+  var submitName = document.getElementById('submitName');
+  submitName.onclick = (e) => {
+    e.preventDefault();
+    modal.style.display = "none";
+  }
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
 })();
