@@ -17,6 +17,7 @@ const submissionSchema = new Schema({
   program: Schema.Types.ObjectId,
   results: Schema.Types.Mixed,
   code: String,
+  time: Number,
 });
 
 module.exports = {

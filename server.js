@@ -91,16 +91,24 @@ io.on('connection', (socket) => {
       else {
         if(data.Messages) {
           data.Messages.map((m) =>{
+            
             const attributes = m.MessageAttributes;
             const responseId = attributes.RequestId.StringValue;
             const receiptHandle = m.ReceiptHandle;
-            console.log("handle" + receiptHandle);
-            console.log("Attributes:", attributes);
             const success = attributes.Success.StringValue === '1';
             const timeTaken = attributes.TimeTaken.StringValue;
-            console.log("RequestId:", responseId, "Success:",success, "time:",timeTaken);
-            __connections[responseId].emit("results", success, timeTaken);
 
+            if(responseId === socket.id) {
+              const s = new Submission({
+                username: "username", /// change this!
+                program: currentProgram._id,
+                results: {success:success},
+                time: timeTaken,
+              });
+              s.save((data) => {
+                socket.emit("results", success, timeTaken);
+              });
+            }
             sqs.deleteMessage({
               QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue",
               ReceiptHandle: receiptHandle,
