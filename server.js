@@ -7,6 +7,7 @@ const Program = mongoose.model('Program');
 const admin = require('./admin');
 const bodyParser = require('body-parser');
 const favicon = require('serve-favicon');
+const uuid = require('node-uuid');
 
 const app = express();
 const http = require('http').Server(app);
@@ -60,6 +61,11 @@ io.on('connection', (socket) => {
           DataType: "String",
           StringValue: JSON.stringify(tests),
         },
+        //generating a random ID. anthony, feel free to change this around
+        "ID":{
+          DataType: "String",
+          StringValue: uuid.v4()
+        }          
       },
       MessageBody: "User Submission",
       QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/SubmissionQueue"
