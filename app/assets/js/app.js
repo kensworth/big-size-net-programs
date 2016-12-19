@@ -51,10 +51,11 @@
     });
   }
   $('.showScore').on('click', showScoreboard);
-  
-  var modal = document.getElementById('myModal');
-  var btn = document.getElementById("myBtn");
-  var submitName = document.getElementById('submitName');
+
+  var modal = document.getElementById('modal');
+  var submitName = document.getElementById('submit-name');
+  var nameInput = document.getElementById('name-input');
+  nameInput.focus();
   submitName.onclick = (e) => {
     e.preventDefault();
     modal.style.display = "none";

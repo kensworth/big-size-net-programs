@@ -29,15 +29,19 @@
         <button class="button" type="button" name="button" @click="submitCode()">Submit</button>
       </div>
     </div>
-    <div id="myModal" class="modal">
+    <section id="modal" class="modal">
       <div class="modal-content">
-        <form>
-          Name: <br>
-          <input type="text" name="name">
-          <input id="submitName" type="submit" value="Submit">
-        </form> 
+        <h3>Submit Name</h3>
+        <ul class="input-list style-1 clearfix">
+          <li>
+            <input id="name-input" type="text" placeholder="Your name will be used in submission rankings">
+          </li>
+        </ul>
+        <div class="row center">
+          <button id="submit-name" class="button" type="button" name="button">Enter</button>
+        </div>
       </div>
-    </div>
+    </section>
     <div class="error">
       No Problems are currently live.<br><br>Try checking in later.
     </div>
