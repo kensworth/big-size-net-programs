@@ -1,11 +1,23 @@
-
-
+@font-face {
+  font-family: 'Bold';
+  src: url('/assets/fonts/CircularStd-Bold.otf');
+}
+@font-face {
+  font-family: 'Text';
+  src: url('/assets/fonts/CircularStd-Book.otf');
+}
+button {
+  font-family: 'Text';
+  letter-spacing: 1px;
+}
 html,body {
   margin: 0;
   padding: 0;
   font-family: "Helvetica", sans-serif;
   font-size: 1.1em;
+  font-family: 'Text';
 }
+
 .row {
   max-width: 30rem;
   margin: 0 auto;
