@@ -11,12 +11,14 @@
       scoreboard: [],
       scoreboardOpen: false,
       currentPage: 0,
+      username: "",
     },
     methods: {
       submitCode: function() {
         socket.emit("submission", {
           code: cm.doc.getValue(),
           programId: this.program._id,
+          username: this.username,
         });
       },
       closeScoreboard: function() {
@@ -73,5 +75,6 @@
   submitName.onclick = (e) => {
     e.preventDefault();
     modal.style.display = "none";
-  }
+    vm.username = nameInput.value;
+  };
 })();

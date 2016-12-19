@@ -66,6 +66,7 @@ io.on('connection', (socket) => {
   });
   socket.on('submission', (data) => {
     const submission = data.code;
+    const username = data.username;
     const tests = {
       program_name: currentProgram.functionName,
       call_signature:currentProgram.callSignature,
@@ -119,7 +120,7 @@ io.on('connection', (socket) => {
             if(responseId === socket.id) {
               console.log("Saving...");
               const s = new Submission({
-                username: "username", /// change this!
+                username: username,
                 program: currentProgram._id,
                 results: {success:success},
                 time: timeTaken,
