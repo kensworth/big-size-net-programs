@@ -36,6 +36,7 @@ app.get('/api/scoreboard/recent', (req, res) => {
         success: true,
       },
     })
+    .limit(50)
     .then((data) => res.json(data));
   }
 });
