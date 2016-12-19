@@ -41,6 +41,7 @@ io.on('connection', (socket) => {
     socket.emit('problem', currentProgram);
   });
   socket.on('submission', (data) => {
+    console.log("socket is on");
     console.log(data, currentProgram);
     const submission = data.code;
     const tests = {
@@ -75,15 +76,20 @@ io.on('connection', (socket) => {
       MessageAttributeNames: [
         "All"
       ],
-      QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue"
+      QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue",
+      WaitTimeSeconds: 20
     }, (err,data) => {
       if (err)console.log(err);
       else {
         console.log("data:",data);
+	console.log("datamsg:",data.Messages);
         if(data.Messages) {
+	  // Iterate through messages, find the one that you need,
+	  // process and delete THAT one
+		
           const receiptHandle = data.Messages[0].ReceiptHandle;
           const attributes = data.Messages[0].MessageAttributes;
-
+	  console.log("handle" + receiptHandle);
           // console.log("Attributes:", attributes);
           const success = attributes.Success.StringValue === '1';
           const timeTaken = attributes.TimeTaken.StringValue;
