@@ -17,6 +17,8 @@ const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const sqs = new AWS.SQS();
 
+const __connections = {};
+
 app.use(favicon(__dirname + '/app/assets/favicon.ico'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,6 +35,9 @@ app.all("*", (req, res) => {
 
 io.on('connection', (socket) => {
   let currentProgram = {};
+  __connections[socket.id] = socket;
+  console.log(__connections);
+
   Program
   .find()
   .sort({releaseDate:-1})
@@ -42,8 +47,6 @@ io.on('connection', (socket) => {
     socket.emit('problem', currentProgram);
   });
   socket.on('submission', (data) => {
-    console.log("socket is on");
-    console.log(data, currentProgram);
     const submission = data.code;
     const tests = {
       program_name: currentProgram.functionName,
@@ -61,11 +64,10 @@ io.on('connection', (socket) => {
           DataType: "String",
           StringValue: JSON.stringify(tests),
         },
-        //generating a random ID. anthony, feel free to change this around
         "RequestId":{
           DataType: "String",
-          StringValue: uuid.v4()
-        }          
+          StringValue: socket.id,
+        }
       },
       MessageBody: "User Submission",
       QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/SubmissionQueue"
@@ -87,38 +89,33 @@ io.on('connection', (socket) => {
     }, (err,data) => {
       if (err)console.log(err);
       else {
-        console.log("data:",data);
-	console.log("datamsg:",data.Messages);
         if(data.Messages) {
-	  // Iterate through messages, find the one that you need,
-	  // process and delete THAT one
-		
-          const receiptHandle = data.Messages[0].ReceiptHandle;
-          const attributes = data.Messages[0].MessageAttributes;
-	  console.log("handle" + receiptHandle);
-          console.log("Attributes:", attributes);
-          const responseId = attributes.RequestId.StringValue;
-          const success = attributes.Success.StringValue === '1';
-          const timeTaken = attributes.TimeTaken.StringValue;
-          console.log("RequestId:", responseId, "Success:",success, "time:",timeTaken);
-          socket.emit("results", success, timeTaken);
+          data.Messages.map((m) =>{
+            const attributes = m.MessageAttributes;
+            const responseId = attributes.RequestId.StringValue;
+            const receiptHandle = m.ReceiptHandle;
+            console.log("handle" + receiptHandle);
+            console.log("Attributes:", attributes);
+            const success = attributes.Success.StringValue === '1';
+            const timeTaken = attributes.TimeTaken.StringValue;
+            console.log("RequestId:", responseId, "Success:",success, "time:",timeTaken);
+            __connections[responseId].emit("results", success, timeTaken);
 
-          sqs.deleteMessage({
-            QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue",
-            ReceiptHandle: receiptHandle,
-          }, (err, data) => {
-            if (err) console.log(err, err.stack);
-            else  {
-              console.log("Message was recieved and deleted.");
-            }
+            sqs.deleteMessage({
+              QueueUrl: "https://sqs.us-east-1.amazonaws.com/542342679377/ReturnQueue",
+              ReceiptHandle: receiptHandle,
+            }, (err, data) => {
+              if (err) console.log(err, err.stack);
+              else  {
+                console.log("Message was recieved and deleted.");
+              }
+            });
           });
         }
       }
     });
   });
 });
-
-
 
 http.listen(8081, () => {
   console.log('listening on *:8081');
