@@ -16,15 +16,18 @@ router.post('/add-program', (req, res) => {
     releaseDate: programData.releaseDate,
     functionName: programData.functionName,
     callSignature: programData.callSignature,
+    number: 0,
   });
   newProg
   .save()
   .then((data) => {
     res.send("yea");
   }, (err) => {
+    console.log(err);
     res.send(err);
   });
 });
+
 
 router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin/index.html'));

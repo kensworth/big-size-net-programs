@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const db = require('./db/db.config.js');
 const Submission = mongoose.model('Submission');
 const Program = mongoose.model('Program');
-const admin = require('./admin');
+const admin = require('./admin-api');
 const bodyParser = require('body-parser');
 const favicon = require('serve-favicon');
 const uuid = require('node-uuid');
@@ -20,13 +20,17 @@ const sqs = new AWS.SQS();
 const __connections = {};
 
 app.use(favicon(__dirname + '/app/assets/favicon.ico'));
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/admin', admin);
-
 app.use('/assets', express.static(path.join(__dirname, '/app/assets')));
+
+app.get('/api/scoreboard/recent', (req, res) => {
+  Submission
+  .find({})
+  .then((data) => res.json(data));
+});
 
 app.all("*", (req, res) => {
   console.log("yo");

@@ -1,4 +1,9 @@
 const mongoose = require('mongoose');
+const autoIncrement = require("mongodb-autoincrement");
+mongoose.plugin(autoIncrement.mongoosePlugin,{
+  field: 'number',
+});
+
 const Schema = mongoose.Schema;
 
 const programSchema = new Schema({
@@ -9,6 +14,7 @@ const programSchema = new Schema({
   callSignature: String,
   functionName: String,
   timeout: Number,
+  number: Number,
 });
 
 const submissionSchema = new Schema({
@@ -18,6 +24,8 @@ const submissionSchema = new Schema({
   results: Schema.Types.Mixed,
   code: String,
   time: Number,
+}, {
+  number: false
 });
 
 module.exports = {

@@ -42,4 +42,13 @@
   socket.on('results', function(data, time) {
     console.log(data, time);
   });
+
+  function showScoreboard() {
+    console.log("getting scoreboard");
+    $.ajax('/api/scoreboard/recent')
+    .then(function(data){
+      console.log(data);
+    });
+  }
+  $('.showScore').on('click', showScoreboard);
 })();
