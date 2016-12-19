@@ -13,21 +13,47 @@
   </head>
   <body>
     <div id="view" :class="{'ready': ready}">
-      <div class="program-info row">
-        <div class="title center">
-          {{program.title}}
+        <div class="program-info row">
+          <div class="title center">
+            {{program.title}}
+          </div>
+          <div class="info">
+            {{program.desc}}
+          </div>
+          <div class="technical">
+            {{program.technical}}
+          </div>
         </div>
-        <div class="info">
-          {{program.desc}}
+        <div id="code" class="row"></div>
+        <div class="row center">
+          <button class="button" type="button" name="button" @click="submitCode()">Submit</button>
         </div>
-        <div class="technical">
-          {{program.technical}}
+        <div class="scoreboard" v-if="scoreboardOpen">
+          <div class="inner">
+            <div class="number">
+              <div class="blurb">
+                Program
+              </div>
+              <div class="digits">
+                <div class="previous">
+
+                </div>
+                <div class="current">
+                  {{program.number}}
+                </div>
+                <div class="next">
+
+                </div>
+              </div>
+            </div>
+            <div class="" v-for="(score, index) in scoreboard" >
+              {{index + 1}}. {{score.username}} – {{score.time.toFixed(2)}}ms
+            </div>
+            <div class="close-scoreboard" @click="closeScoreboard()">
+              Close
+            </div>
+          </div>
         </div>
-      </div>
-      <div id="code" class="row"></div>
-      <div class="row center">
-        <button class="button" type="button" name="button" @click="submitCode()">Submit</button>
-      </div>
     </div>
     <section id="modal" class="modal">
       <div class="modal-content">

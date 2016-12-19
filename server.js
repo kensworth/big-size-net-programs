@@ -18,6 +18,7 @@ AWS.config.update({region: 'us-east-1'});
 const sqs = new AWS.SQS();
 
 const __connections = {};
+let __currentProgram = {};
 
 app.use(favicon(__dirname + '/app/assets/favicon.ico'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,6 +28,20 @@ app.use('/admin', admin);
 app.use('/assets', express.static(path.join(__dirname, '/app/assets')));
 
 app.get('/api/scoreboard/recent', (req, res) => {
+  if(__currentProgram.number) {
+    Submission
+    .find({
+      program: __currentProgram._id,
+      results: {
+        success: true,
+      },
+    })
+    .limit(50)
+    .then((data) => res.json(data));
+  }
+});
+
+app.get('/api/scoreboard/:number', (req, res) => {
   Submission
   .find({})
   .then((data) => res.json(data));
@@ -46,6 +61,7 @@ io.on('connection', (socket) => {
   .limit(1)
   .then((data) => {
     currentProgram = data[0];
+    __currentProgram = data[0];
     socket.emit('problem', currentProgram);
   });
   socket.on('submission', (data) => {
