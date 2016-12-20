@@ -15,7 +15,9 @@
       loading: false,
       success: false,
       successTime: 0,
+      maxNumber: 0,
       fc: {},
+      old: {},
       originalCode: "",
     },
     methods: {
@@ -35,19 +37,46 @@
       closeScoreboard: function() {
         this.scoreboardOpen = false;
       },
+      getProgram: function(i) {
+        $.ajax('/api/scoreboard/'+i)
+        .then(function(data){
+          console.log(data);
+          var scores = data.scores;
+          var tempProg = data.program;
+
+          scores.sort(function(a, b) {
+            return parseFloat(a.time) - parseFloat(b.time);
+          });
+          vm.$set(vm, 'scoreboard', scores);
+          vm.currentPage = i;
+          vm.old = tempProg;
+        });
+      },
+      useOld: function() {
+        initWithProgram(this.old);
+        this.scoreboardOpen = false;
+      },
     },
     mounted: function() {
       this.ready = true;
+
     }
   });
 
   function initWithProgram(data) {
+    vm.loading =  false;
+    vm.success = false;
+    vm.successTime = 0;
+    vm.fc = {};
     vm.$set(vm, 'program', data);
+    console.log(cm);
     vm.originalCode = "def " + data.functionName + "(" + data.callSignature +"):";
+    $('#code-wrap').empty();
+    $('#code-wrap').append('<div id="code" class="row"></div>');
     cm = CodeMirror(document.getElementById("code"), {
-      value: vm.originalCode,
       mode:  "python",
-      lineNumbers: true
+      lineNumbers: true,
+      value: vm.originalCode,
     });
   }
 
@@ -58,6 +87,9 @@
       return;
     }
     if(!connected) {
+      vm.maxNumber = data.number;
+      vm.currentPage = data.number;
+
       initWithProgram(data);
       connected = true;
     }
@@ -76,10 +108,10 @@
 
   function showScoreboard() {
     vm.scoreboardOpen = true;
-    $.ajax('/api/scoreboard/recent')
+    $.ajax('/api/scoreboard/'+vm.currentPage)
     .then(function(data){
 
-      var scores = data;
+      var scores = data.scores;
       scores.sort(function(a, b) {
         return parseFloat(a.time) - parseFloat(b.time);
       });

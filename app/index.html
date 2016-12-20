@@ -26,7 +26,9 @@
           </div>
         </div>
         <div v-if="!success">
-          <div id="code" class="row" ></div>
+          <div id="code-wrap">
+            <div id="code" class="row"></div>
+          </div>
           <div class="row center" v-if="!success">
             <button class="button" type="button" name="button" @click="submitCode()">Submit <i class="ion-load-c" v-if="loading"></i></button>
           </div>
@@ -47,14 +49,14 @@
                 Program
               </div>
               <div class="digits">
-                <div class="previous">
-
+                <div class="previous" v-if="currentPage - 1 > 0" @click="getProgram(currentPage-1)">
+                  {{currentPage - 1}}
                 </div>
                 <div class="current">
-                  {{program.number}}
+                  {{currentPage}}
                 </div>
-                <div class="next">
-
+                <div class="next" v-if="currentPage < maxNumber" @click="getProgram(currentPage + 1)">
+                  {{currentPage + 1}}
                 </div>
               </div>
             </div>
@@ -63,6 +65,9 @@
             </div>
             <div class="close-scoreboard" @click="closeScoreboard()">
               Close
+            </div>
+            <div class="use-old" @click="useOld()" v-if="currentPage !== program.number">
+              Try this program
             </div>
           </div>
         </div>

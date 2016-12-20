@@ -101,6 +101,20 @@ html,body {
   margin-top: 2em;
 }
 
+.use-old {
+  float: right;
+  font-size: 0.6em;
+  opacity: 0.8;
+  padding: 0.2em 0.2em;
+  text-align: center;
+  color: blue;
+  border-bottom: 2px solid;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 auto;
+  margin-top: 2em;
+}
+
 .no-question .error {
   display: block;
 }
@@ -138,8 +152,15 @@ html,body {
   justify-content: flex-start;
   align-items: center;
 }
+.digits > div {
+  font-size: 0.5em;
+  line-height: 2em;
+  cursor: pointer;
+}
 .digits .current {
   flex-grow: 1;
+  font-size: 1em;
+  cursor: auto;
 }
 .modal {
   display: block; /* Hidden by default */

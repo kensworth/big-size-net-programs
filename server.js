@@ -42,9 +42,24 @@ app.get('/api/scoreboard/recent', (req, res) => {
 });
 
 app.get('/api/scoreboard/:number', (req, res) => {
-  Submission
-  .find({})
-  .then((data) => res.json(data));
+  Program
+  .findOne({
+    number: parseInt(req.params.number),
+  })
+  .then((p) => {
+    console.log("p",p);
+    Submission
+    .find({
+      program: p._id,
+      results: {
+        success: true,
+      },
+    })
+    .then((data) => res.json({
+      program: p,
+      scores: data,
+    }));
+  });
 });
 
 app.all("*", (req, res) => {
@@ -68,6 +83,7 @@ io.on('connection', (socket) => {
     const submission = data.code;
     const username = data.username;
     const programId = data.programId;
+    let oldProgram = {};
     // console.log(programId, ""+currentProgram._id, programId === ""+currentProgram._id);
     if(programId === ""+currentProgram._id) {
       console.log("is current program");
@@ -104,7 +120,7 @@ io.on('connection', (socket) => {
       Program
       .findOne({_id: programId})
       .then((_data) => {
-        let oldProgram = _data;
+        oldProgram = _data;
         console.log("old",oldProgram);
         const tests = {
           program_name: oldProgram.functionName,
@@ -161,7 +177,7 @@ io.on('connection', (socket) => {
               console.log("Saving...");
               const s = new Submission({
                 username: username,
-                program: currentProgram._id,
+                program: oldProgram._id,
                 results: {success:success},
                 time: timeTaken,
                 failedCase: failedCase,
